@@ -18,6 +18,7 @@ services:
     depends_on:
       - db
     container_name: larashop_app
+    user: "${UID}:${GID}"
   db:
     image: mysql:latest
     restart: always
