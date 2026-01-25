@@ -27,6 +27,18 @@
                 <div class="col-12">
                     <form action="{{ route('tag.store') }}" method="post" class="d-flex flex-column align-items-start w-50">
                         @csrf
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger w-100">
+                                <strong>Please fix the following errors:</strong>
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif                        
+
                         <div class="form-group w-100">
                             <input type="text" name="title" class="form-control" placeholder="Title">
                         </div>

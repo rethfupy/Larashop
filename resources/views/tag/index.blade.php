@@ -45,13 +45,20 @@
                                         @foreach ($tags as $tag)
                                             <tr>
                                                 <td>{{ $tag->id }}</td>
-                                                <td><a href="{{ route('tag.show', $tag->id) }}">{{ $tag->title }}</a></td>
-                                                <td class="d-flex justify-content-end" style="gap: 0.5rem;">
-                                                    <a class="btn btn-primary" href="{{ route('tag.edit', $tag->id) }}">Edit</a>
+                                                <td>{{ $tag->title }}</td>
+                                                <td class="d-flex align-items-center justify-content-end">
+                                                    <a class="btn" href="{{ route('tag.show', $tag->id) }}">
+                                                        <i class="fas fa-eye text-dark"></i>
+                                                    </a>
+                                                    <a class="btn" href="{{ route('tag.edit', $tag->id) }}">
+                                                        <i class="fas fa-edit text-dark"></i>
+                                                    </a>
                                                     <form action="{{ route('tag.delete', $tag->id) }}" method="post">
                                                         @csrf
                                                         @method('delete')
-                                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                                        <button type="submit" class="btn">
+                                                            <i class="fas fa-trash text-danger"></i>
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>

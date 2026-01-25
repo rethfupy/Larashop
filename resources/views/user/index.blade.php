@@ -6,12 +6,12 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Categories</h1>
+                    <h1 class="m-0">Users</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{{ route('main.index') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item active">Categories</li>
+                        <li class="breadcrumb-item active">Users</li>
                     </ol>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -26,34 +26,38 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header d-flex justify-content-end">
-                            <a class="btn btn-primary" href="{{ route('category.create') }}">Create category</a>
+                            <a class="btn btn-primary" href="{{ route('user.create') }}">Create user</a>
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body table-responsive p-0">
-                            @if (count($categories) === 0)
-                                <h4 class="text-center my-4">No existing categories.</h2>
+                            @if (count($users) === 0)
+                                <h4 class="text-center my-4">No existing users.</h2>
                             @else
                                 <table class="table table-hover text-nowrap">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>Title</th>
+                                            <th>Name</th>
+                                            <th>Surname</th>
+                                            <th>Email</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($categories as $category)
+                                        @foreach ($users as $user)
                                             <tr>
-                                                <td>{{ $category->id }}</td>
-                                                <td>{{ $category->title }}</td>
+                                                <td>{{ $user->id }}</td>
+                                                <td>{{ $user->name }}</td>
+                                                <td>{{ $user->surname }}</td>
+                                                <td>{{ $user->email }}</td>
                                                 <td class="d-flex align-items-center justify-content-end">
-                                                    <a class="btn" href="{{ route('category.show', $category->id) }}">
+                                                    <a class="btn" href="{{ route('user.show', $user->id) }}">
                                                         <i class="fas fa-eye text-dark"></i>
                                                     </a>
-                                                    <a class="btn" href="{{ route('category.edit', $category->id) }}">
+                                                    <a class="btn" href="{{ route('user.edit', $user->id) }}">
                                                         <i class="fas fa-edit text-dark"></i>
                                                     </a>
-                                                    <form action="{{ route('category.delete', $category->id) }}" method="post">
+                                                    <form action="{{ route('user.delete', $user->id) }}" method="post">
                                                         @csrf
                                                         @method('delete')
                                                         <button type="submit" class="btn">
@@ -64,7 +68,7 @@
                                             </tr>
                                         @endforeach 
                                     </tbody>
-                                </table>                            
+                                </table>
                             @endif
                         </div>
                         <!-- /.card-body -->

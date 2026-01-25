@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Gender;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,7 +22,20 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'surname',
+        'address',
+        'age',
+        'gender'
     ];
+
+    protected $casts = [
+        'gender' => Gender::class,
+    ];
+
+    public function getGenderLabelAttribute(): string
+    {
+        return $this->gender?->label() ?? 'Not specified';
+    }
 
     /**
      * The attributes that should be hidden for serialization.

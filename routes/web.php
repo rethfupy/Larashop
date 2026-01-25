@@ -28,6 +28,18 @@ Route::prefix('admin')->group(function() {
             Route::patch('/{tag}', UpdateController::class)->name('tag.update');
             Route::delete('/{tag}', DeleteController::class)->name('tag.delete');
         });
+
+    Route::prefix('users')
+        ->namespace('\App\Http\Controllers\User')
+        ->group(function() {
+            Route::get('/', IndexController::class)->name('user.index');
+            Route::get('/create', CreateController::class)->name('user.create');
+            Route::post('/', StoreController::class)->name('user.store');
+            Route::get('/{user}/edit', EditController::class)->name('user.edit');
+            Route::get('/{user}', ShowController::class)->name('user.show');
+            Route::patch('/{user}', UpdateController::class)->name('user.update');
+            Route::delete('/{user}', DeleteController::class)->name('user.delete');
+        });
 });
 
 Route::get('{any}', App\Http\Controllers\Client\IndexController::class)

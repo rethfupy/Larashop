@@ -28,8 +28,20 @@
                     <form action="{{ route('category.update', $category->id) }}" method="post" class="d-flex flex-column align-items-start w-50">
                         @csrf
                         @method('patch')
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger w-100">
+                                <strong>Please fix the following errors:</strong>
+                                <ul class="mb-0">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif 
+                        
                         <div class="form-group w-100">
-                            <input type="text" name="title" class="form-control" placeholder="Title" value="{{ $category->title }}">
+                            <input type="text" name="title" class="form-control" placeholder="Title" value="{{ old('title') ?? $category->title }}">
                         </div>
                         <div class="form-group">
                             <button class="btn btn-primary px-4" type="submit">Edit</button>

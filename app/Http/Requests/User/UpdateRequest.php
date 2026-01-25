@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Tag;
+namespace App\Http\Requests\User;
 
+use App\Enums\Gender;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateRequest extends FormRequest
 {
@@ -22,7 +24,12 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:3|max:50|unique:tags,title,' . $this->tag->id,
+            'name' => 'required|string|min:2|max:50',
+            'email' => 'required|email|unique:users,email,' . $this->user->id,
+            'surname' => 'nullable|string|max:50',
+            'age' => 'nullable|integer|min:1|max:150',
+            'address' => 'nullable|string|min:3|max:255',
+            'gender' => ['nullable', new Enum(Gender::class)],
         ];
     }
 }
