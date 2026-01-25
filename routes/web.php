@@ -40,7 +40,21 @@ Route::prefix('admin')->group(function() {
             Route::patch('/{user}', UpdateController::class)->name('user.update');
             Route::delete('/{user}', DeleteController::class)->name('user.delete');
         });
+
+    Route::prefix('products')
+        ->namespace('\App\Http\Controllers\Product')
+        ->group(function() {
+            Route::get('/', IndexController::class)->name('product.index');
+            Route::get('/create', CreateController::class)->name('product.create');
+            Route::post('/', StoreController::class)->name('product.store');
+            Route::get('/{product}/edit', EditController::class)->name('product.edit');
+            Route::get('/{product}', ShowController::class)->name('product.show');
+            Route::patch('/{product}', UpdateController::class)->name('product.update');
+            Route::delete('/{product}', DeleteController::class)->name('product.delete');
+        });
 });
 
-Route::get('{any}', App\Http\Controllers\Client\IndexController::class)
-    ->where('any', '.*');
+// Route::get('{any}', App\Http\Controllers\Client\IndexController::class)
+//     ->where('any', '.*');
+
+Route::get('/', App\Http\Controllers\Client\IndexController::class);
