@@ -54,7 +54,5 @@ Route::prefix('admin')->group(function() {
         });
 });
 
-// Route::get('{any}', App\Http\Controllers\Client\IndexController::class)
-//     ->where('any', '.*');
-
-Route::get('/', App\Http\Controllers\Client\IndexController::class);
+Route::get('{any}', App\Http\Controllers\Client\IndexController::class)
+    ->where('any', '.*');
