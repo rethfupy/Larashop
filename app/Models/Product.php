@@ -34,4 +34,11 @@ class Product extends Model
     {
         return $this->belongsToMany(Tag::class, 'product_tags', 'product_id', 'tag_id');
     }
+
+    public function getPreviewImageUrlAttribute()
+    {
+        return $this->preview_image
+            ? asset('storage/' . $this->preview_image)
+            : null;
+    }
 }

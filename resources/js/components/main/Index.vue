@@ -2075,7 +2075,7 @@
 
 <script>
     export default {
-        name: "Index"
+        name: "MainIndex"
     }
 </script>
 

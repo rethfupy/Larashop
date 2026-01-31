@@ -13,7 +13,7 @@
 	<link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
 	
 	<!-- StyleSheet -->
-	
+
 	<!-- Bootstrap -->
 	<link rel="stylesheet" href="{{ asset('client/css/bootstrap.css') }}">
 	<!-- Magnific Popup -->
@@ -32,7 +32,9 @@
     <link rel="stylesheet" href="{{ asset('client/css/owl-carousel.css') }}">
 	<!-- Slicknav -->
     <link rel="stylesheet" href="{{ asset('client/css/slicknav.min.css') }}">
-	
+    <!-- jquery-ui --> 
+	<link rel="stylesheet" href="{{ asset('client/css/jquery-ui.css') }}">
+
 	<!-- Eshop StyleSheet -->
 	<link rel="stylesheet" href="{{ asset('client/css/reset.css') }}">
 	<link rel="stylesheet" href="{{ asset('client/css/style.css') }}">

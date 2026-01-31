@@ -130,15 +130,12 @@
                                         <div class="navbar-collapse">	
                                             <div class="nav-inner">	
                                                 <ul class="nav main-menu menu navbar-nav">
-                                                    <li class="active"><a href="#">Home<i class="ti-angle-down"></i></a>
-                                                        <ul class="dropdown">
-                                                            <li><a href="index.html">Home Ecommerce V1</a></li>
-                                                            <li><a href="index2.html">Home Ecommerce V2</a></li>
-                                                            <li><a href="index3.html">Home Ecommerce V3</a></li>
-                                                            <li><a href="index4.html">Home Ecommerce V4</a></li>
-                                                        </ul>
+                                                    <li>
+                                                        <RouterLink :to="{ name: 'main.index' }">Home</RouterLink>
                                                     </li>
-                                                    <li><a href="#">Product</a></li>												
+                                                    <li>
+                                                        <RouterLink :to="{ name: 'product.index' }">Products</RouterLink>
+                                                    </li>
                                                     <li><a href="#">Service</a></li>
                                                     <li><a href="#">Shop<i class="ti-angle-down"></i><span class="new">New</span></a>
                                                         <ul class="dropdown">
@@ -281,17 +278,23 @@
 
 <script>
     import { initJquery } from '../initJquery.js';
-    
+
     export default {
         name: "App",
         mounted() {
             setTimeout(() => {
                 initJquery();
             }, 100);
+        },
+        watch: {
+            '$route.path'() {
+                setTimeout(() => {
+                    initJquery();
+                }, 100);
+            }
         }
     }
 </script>
 
 <style lang="scss" scoped>
-
 </style>
