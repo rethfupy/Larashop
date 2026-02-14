@@ -61,8 +61,31 @@
                             </div>
                         </div>
                         <div class="form-group w-100">
+                            <label for="exampleInputFile" class="form-label">Add product images (up to 3)</label>
+                            <div class="d-flex flex-column" style="gap: 1rem;">
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="product_images[]">
+                                        <label class="custom-file-label" for="product_images[]">Choose image</label>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="product_images[]">
+                                        <label class="custom-file-label" for="product_images[]">Choose image</label>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="product_images[]">
+                                        <label class="custom-file-label" for="product_images[]">Choose image</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group w-100">
                             <label for="price" class="form-label">Price</label>
-                            <input type="number" name="price" class="form-control" placeholder="Enter price" min="0" value="{{ old('price') }}" required>
+                            <input type="number" name="price" class="form-control" placeholder="Enter price" min="0" value="{{ old('price') }}" step="0.01" required>
                         </div>
                         <div class="form-group w-100">
                             <label for="stock" class="form-label">Stock</label>

@@ -81,6 +81,19 @@
                             </div>
                             <!-- /.card-body -->
                         @endif
+
+                        @if (count($product->images) > 0)
+                            <div class="card-body p-4">
+                                <h4>Images</h4>
+                                <div class="d-flex flex-wrap" style="gap: 1rem;">
+                                    @foreach ($product->images as $image)
+                                        <div class="w-25 rounded" 
+                                            style="height: 300px; background-repeat: no-repeat; background-position: center; background-size: cover; background-image: url('{{ asset('storage/' . $image->image_path) }}');">
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
                         
                         @if ($product->content)
                             <div class="card-body p-4">

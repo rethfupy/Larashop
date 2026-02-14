@@ -164,10 +164,6 @@
 											</select>
 										</div>
 									</div>
-									<ul class="view-mode">
-										<li class="active"><a href="shop-grid.html"><i class="fa fa-th-large"></i></a></li>
-										<li><a href="shop-list.html"><i class="fa fa-th-list"></i></a></li>
-									</ul>
 								</div>
 								<!--/ End Shop Top -->
 							</div>
@@ -181,10 +177,14 @@
                                             <img class="hover-img" :src="product.preview_image" alt="#">
                                         </a>
                                         <div class="button-head">
-                                            <div class="product-action">
-                                                <a data-toggle="modal" data-target="#exampleModal" title="Quick View" href="#"><i class=" ti-eye"></i><span>Quick Shop</span></a>
+                                            <div class="product-action pr-1">
+                                                <a @click="selectProduct(product)"
+                                                    data-toggle="modal" 
+                                                    data-target="#exampleModal" 
+                                                    title="Quick View" 
+                                                    href="#"
+                                                ><i class=" ti-eye"></i><span>Quick Shop</span></a>
                                                 <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
-                                                <a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to Compare</span></a>
                                             </div>
                                             <div class="product-action-2">
                                                 <a title="Add to cart" href="#">Add to cart</a>
@@ -216,31 +216,17 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="ti-close" aria-hidden="true"></span></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row no-gutters">
+                        <div v-if="selectedProduct" class="row no-gutters h-100">
                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                <!-- Product Slider -->
-                                    <div class="product-gallery">
-                                        <div class="quickview-slider-active">
-                                            <div class="single-slider">
-                                                <img src="" alt="#">
-                                            </div>
-                                            <div class="single-slider">
-                                                <img src="" alt="#">
-                                            </div>
-                                            <div class="single-slider">
-                                                <img src="" alt="#">
-                                            </div>
-                                            <div class="single-slider">
-                                                <img src="" alt="#">
-                                            </div>
-                                        </div>
-                                    </div>
-                                <!-- End Product slider -->
+                                <div class="bg-center bg-cover bg-no-repeat h-100 w-100"
+                                    :style="{ backgroundImage: `url(${selectedProduct.preview_image})` }"
+                                ></div>
                             </div>
                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                 <div class="quickview-content">
-                                    <h2>Flared Shift Dress</h2>
+                                    <h2>{{ selectedProduct.title }}</h2>
                                     <div class="quickview-ratting-review">
+                                        <!--  
                                         <div class="quickview-ratting-wrap">
                                             <div class="quickview-ratting">
                                                 <i class="yellow fa fa-star"></i>
@@ -251,57 +237,53 @@
                                             </div>
                                             <a href="#"> (1 customer review)</a>
                                         </div>
-                                        <div class="quickview-stock">
-                                            <span><i class="fa fa-check-circle-o"></i> in stock</span>
+                                        -->
+                                        <div class="quickview-stock ml-0">
+                                            <span v-if="selectedProduct.stock > 0">
+                                                <i class="fa fa-check-circle-o"></i> in stock ({{ selectedProduct.stock }})
+                                            </span>
+                                            <span v-else class="text-red-600 font-semibold">
+                                                Out of stock
+                                            </span>
                                         </div>
                                     </div>
-                                    <h3>$29.00</h3>
-                                    <div class="quickview-peragraph">
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia iste laborum ad impedit pariatur esse optio tempora sint ullam autem deleniti nam in quos qui nemo ipsum numquam.</p>
-                                    </div>
-                                    <div class="size">
-                                        <div class="row">
-                                            <div class="col-lg-6 col-12">
-                                                <h5 class="title">Size</h5>
-                                                <select>
-                                                    <option selected="selected">s</option>
-                                                    <option>m</option>
-                                                    <option>l</option>
-                                                    <option>xl</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-lg-6 col-12">
-                                                <h5 class="title">Color</h5>
-                                                <select>
-                                                    <option selected="selected">orange</option>
-                                                    <option>purple</option>
-                                                    <option>black</option>
-                                                    <option>pink</option>
-                                                </select>
-                                            </div>
+
+                                    <h3>{{ selectedProduct.price }}€</h3>
+
+                                    <div class="quickview-peragraph mb-2">
+                                        <p class="mb-2">{{ selectedProduct.description }}</p>
+                                        <div v-if="selectedProduct.tags" class="flex flex-wrap gap-2">
+                                            <span v-for="tag in selectedProduct.tags"
+                                                class="bg-orange-400 px-2 rounded-md"
+                                            >{{ tag.title }}</span>
                                         </div>
                                     </div>
-                                    <div class="quantity">
+
+                                    <div class="quantity mb-2">
                                         <!-- Input Order -->
                                         <div class="input-group">
                                             <div class="button minus">
-                                                <button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                                <button @click="changeQty('minus')" type="button" class="btn btn-primary btn-number">
                                                     <i class="ti-minus"></i>
                                                 </button>
                                             </div>
-                                            <input type="text" name="quant[1]" class="input-number"  data-min="1" data-max="1000" value="1">
+                                            <input @blur="validateQty"
+                                                v-model.number="selectedProductQty"
+                                                min="1" :max="selectedProduct.stock"
+                                                class="input-number [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                                type="number" />
                                             <div class="button plus">
-                                                <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
+                                                <button @click="changeQty('plus')" type="button" class="btn btn-primary btn-number">
                                                     <i class="ti-plus"></i>
                                                 </button>
                                             </div>
                                         </div>
                                         <!--/ End Input Order -->
                                     </div>
-                                    <div class="add-to-cart">
+
+                                    <div class="add-to-cart d-block">
                                         <a href="#" class="btn">Add to cart</a>
                                         <a href="#" class="btn min"><i class="ti-heart"></i></a>
-                                        <a href="#" class="btn min"><i class="fa fa-compress"></i></a>
                                     </div>
                                     <div class="default-social">
                                         <h4 class="share-now">Share:</h4>
@@ -331,6 +313,8 @@
         data() {
             return {
                 products: null,
+                selectedProduct: null,
+                selectedProductQty: 1,
             }
         },
         methods: {
@@ -338,6 +322,32 @@
                 axios.get('/api/products').then(res => {
                     this.products = res.data.data;
                 });
+            },
+            selectProduct(product) {
+                this.selectedProduct = product;
+                this.selectedProductQty = 1;
+            },
+            changeQty(operation) {
+                if (operation === 'plus') {
+                    if (this.selectedProductQty < this.selectedProduct.stock) {
+                        this.selectedProductQty++;
+                    }
+                } else {
+                    if (this.selectedProductQty > 1) {
+                        this.selectedProductQty--;
+                    }
+                }                
+            },
+            validateQty() {
+                this.selectedProductQty = parseInt(this.selectedProductQty) || 1;
+
+                if (this.selectedProductQty < 1) {
+                    this.selectedProductQty = 1;
+                }
+
+                if (this.selectedProductQty > this.selectedProduct.stock) {
+                    this.selectedProductQty = this.selectedProduct.stock;
+                }
             }
         },
         mounted() {

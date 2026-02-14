@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\ProductImage;
 
 class Product extends Model
 {
@@ -40,5 +41,10 @@ class Product extends Model
         return $this->preview_image
             ? asset('storage/' . $this->preview_image)
             : null;
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
     }
 }
