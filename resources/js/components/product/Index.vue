@@ -218,9 +218,46 @@
                     <div class="modal-body">
                         <div v-if="selectedProduct" class="row no-gutters h-100">
                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                                <div class="bg-center bg-cover bg-no-repeat h-100 w-100"
+                                <!-- Single Image (no slider) -->
+                                <div v-if="!hasMultipleImages" class="bg-center bg-cover bg-no-repeat h-100 w-100"
                                     :style="{ backgroundImage: `url(${selectedProduct.preview_image})` }"
                                 ></div>
+                                <!-- Product Slider -->
+                                <div v-else class="relative h-100">
+                                    <!-- Main Image -->
+                                    <div 
+                                        class="w-full h-100 bg-center bg-cover bg-no-repeat rounded transition-all duration-300"
+                                        :style="{ backgroundImage: `url(${allImages[currentSlide]})` }"
+                                    ></div>
+
+                                    <!-- Previous Button -->
+                                    <button 
+                                        @click="prevSlide"
+                                        class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition"
+                                    >
+                                        <i class="ti-angle-left text-xl"></i>
+                                    </button>
+
+                                    <!-- Next Button -->
+                                    <button 
+                                        @click="nextSlide"
+                                        class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition"
+                                    >
+                                        <i class="ti-angle-right text-xl"></i>
+                                    </button>
+
+                                    <!-- Dot Indicators -->
+                                    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                                        <button
+                                            v-for="(image, index) in allImages"
+                                            :key="index"
+                                            @click="goToSlide(index)"
+                                            class="w-2 h-2 rounded-full transition-all duration-300"
+                                            :class="currentSlide === index ? 'bg-white w-8' : 'bg-white/50'"
+                                        ></button>
+                                    </div>
+                                </div>
+                                <!-- End Product slider -->
                             </div>
                             <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                                 <div class="quickview-content">
@@ -315,6 +352,23 @@
                 products: null,
                 selectedProduct: null,
                 selectedProductQty: 1,
+                currentSlide: 0,
+            }
+        },
+        computed: {
+            allImages() {
+                if (!this.selectedProduct) { return [] };
+
+                const images = [this.selectedProduct.preview_image];
+
+                if (this.selectedProduct.images && this.selectedProduct.images.length > 0) {
+                    images.push(...this.selectedProduct.images.map(img => img.image_url));
+                }
+
+                return images;
+            },
+            hasMultipleImages() {
+                return this.allImages.length > 1;
             }
         },
         methods: {
@@ -326,6 +380,7 @@
             selectProduct(product) {
                 this.selectedProduct = product;
                 this.selectedProductQty = 1;
+                this.currentSlide = 0;
             },
             changeQty(operation) {
                 if (operation === 'plus') {
@@ -348,6 +403,23 @@
                 if (this.selectedProductQty > this.selectedProduct.stock) {
                     this.selectedProductQty = this.selectedProduct.stock;
                 }
+            },
+            nextSlide() {
+                if (this.currentSlide < this.allImages.length - 1) {
+                    this.currentSlide++;
+                } else {
+                    this.currentSlide = 0;
+                }
+            },
+            prevSlide() {
+                if (this.currentSlide > 0) {
+                    this.currentSlide--;
+                } else {
+                    this.currentSlide = this.allImages.length - 1;
+                }
+            },
+            goToSlide(index) {
+                this.currentSlide = index;
             }
         },
         mounted() {

@@ -69,6 +69,51 @@
                             </div>
                         </div>
                         <div class="form-group w-100">
+                            <label class="form-label">Product Images</label>
+                            @if($product->images->count() > 0)
+                                <div class="mb-3">
+                                    <div class="d-flex flex-wrap" style="gap: 1rem;">
+                                        @foreach($product->images as $image)
+                                            <div class="position-relative" style="width: 150px;">
+                                                <div class="w-100 rounded" 
+                                                    style="height: 150px; background-repeat: no-repeat; background-position: center; background-size: cover; background-image: url('{{ asset('storage/' . $image->image_path) }}');">
+                                                </div>
+                                                <div class="mt-2">
+                                                    <label class="d-flex align-items-center">
+                                                        <input 
+                                                            type="checkbox" 
+                                                            name="delete_images[]" 
+                                                            value="{{ $image->id }}"
+                                                            class="mr-2"
+                                                        >
+                                                        <span class="text-danger small">Delete this image</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <label class="d-block mb-2">Add more images:</label>
+                            @endif
+                            
+                            <div class="d-flex flex-column" style="gap: 1rem;">
+                                @for($i = 0; $i < 3; $i++)
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input 
+                                                type="file" 
+                                                class="custom-file-input" 
+                                                name="product_images[]"
+                                                accept="image/*"
+                                            >
+                                            <label class="custom-file-label">Upload new image</label>
+                                        </div>
+                                    </div>
+                                @endfor
+                            </div>
+                        </div>                        
+                        <div class="form-group w-100">
                             <label for="price" class="form-label">Price</label>
                             <input type="number" name="price" class="form-control" placeholder="Enter price" min="0" value="{{ old('price') ?? $product->price }}" required>
                         </div>
@@ -99,7 +144,7 @@
                             <label class="form-check-label" for="is_published">Publish product</label>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-primary px-4" type="submit">Create</button>
+                            <button class="btn btn-primary px-4" type="submit">Edit</button>
                         </div>
                     </form>
                 </div>

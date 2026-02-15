@@ -23,11 +23,30 @@ class UpdateController extends Controller
         }
 
         $tagIds = $data['tags'] ?? [];
-        unset($data['tags']);
+        $productImages = $data['product_images'] ?? [];
+        $deleteImagesIds = $data['delete_images'] ?? [];
+        unset($data['tags'],  $data['product_images'], $data['delete_images']);
 
         $product->update($data);
         
         $product->tags()->sync($tagIds);
+
+        if (!empty($productImages)) {
+            foreach ($productImages as $image) {
+                $path = Storage::disk('public')->put('images', $image);
+                $product->images()->create([
+                    'image_path' => $path
+                ]);
+            };
+        };
+
+        if (!empty($deleteImagesIds)) {
+            $imagesToDelete = $product->images()->whereIn('id', $deleteImagesIds)->get();
+            foreach ($imagesToDelete as $image) {
+                Storage::disk('public')->delete($image->image_path);
+                $image->delete();
+            };
+        };
 
         return redirect()->route('product.index');
     }
