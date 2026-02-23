@@ -27,47 +27,47 @@
 				<div class="row">
 					<div class="col-lg-3 col-md-4 col-12">
 						<div class="shop-sidebar">
-								<!-- Single Widget -->
-								<div class="single-widget category">
+								<!-- Categories -->
+								<div v-if="filterList" class="single-widget category">
 									<h3 class="title">Categories</h3>
 									<ul class="categor-list">
-										<li><a href="#">T-shirts</a></li>
-										<li><a href="#">jacket</a></li>
-										<li><a href="#">jeans</a></li>
-										<li><a href="#">sweatshirts</a></li>
-										<li><a href="#">trousers</a></li>
-										<li><a href="#">kitwears</a></li>
-										<li><a href="#">accessories</a></li>
+										<li v-for="category in filterList.categories">
+                                            <a href="#" 
+                                                @click.prevent="applyFilter('category', category.id)"
+                                                :class="categoryId === category.id ? 'text-orange-500!' : ''"
+                                            >{{ category.title }}</a>
+                                        </li>
 									</ul>
 								</div>
-								<!--/ End Single Widget -->
+								<!--/ End Categories -->
 								<!-- Shop By Price -->
-									<div class="single-widget range">
-										<h3 class="title">Shop by Price</h3>
-										<div class="price-filter">
-											<div class="price-filter-inner">
-												<div id="slider-range"></div>
-													<div class="price_slider_amount">
-													<div class="label-input">
-														<span>Range:</span><input type="text" id="amount" name="price" placeholder="Add Your Price"/>
-													</div>
-												</div>
-											</div>
-										</div>
-										<ul class="check-box-list">
-											<li>
-												<label class="checkbox-inline" for="1"><input name="news" id="1" type="checkbox">$20 - $50<span class="count">(3)</span></label>
-											</li>
-											<li>
-												<label class="checkbox-inline" for="2"><input name="news" id="2" type="checkbox">$50 - $100<span class="count">(5)</span></label>
-											</li>
-											<li>
-												<label class="checkbox-inline" for="3"><input name="news" id="3" type="checkbox">$100 - $250<span class="count">(8)</span></label>
-											</li>
-										</ul>
-									</div>
-									<!--/ End Shop By Price -->
-								<!-- Single Widget -->
+                                <div class="single-widget range">
+                                    <h3 class="title">Shop by Price</h3>
+                                    <div class="price-filter">
+                                        <div class="price-filter-inner">
+                                            <div id="slider-range"></div>
+                                                <div class="price_slider_amount">
+                                                <div class="label-input">
+                                                    <span>Range:</span><input type="text" id="amount" name="price" placeholder="Add Your Price"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--/ End Shop By Price -->
+								<!-- Tags -->
+								<div v-if="filterList" class="single-widget category">
+									<h3 class="title">Tags</h3>
+                                    <div class="flex flex-wrap gap-2">
+                                        <a v-for="tag in filterList.tags" href="#" 
+                                            @click.prevent="applyFilter('tags', tag.id)"
+                                            :class="tags.includes(tag.id) ? 'text-orange-500!' : ''"
+                                            class="capitalize"
+                                        >{{ tag.title }}</a>
+                                    </div>
+								</div>
+								<!--/ End Tags -->                                
+								<!-- Recent items -->
 								<div class="single-widget recent-post">
 									<h3 class="title">Recent post</h3>
 									<!-- Single Post -->
@@ -125,19 +125,7 @@
 									</div>
 									<!-- End Single Post -->
 								</div>
-								<!--/ End Single Widget -->
-								<!-- Single Widget -->
-								<div class="single-widget category">
-									<h3 class="title">Manufacturers</h3>
-									<ul class="categor-list">
-										<li><a href="#">Forever</a></li>
-										<li><a href="#">giordano</a></li>
-										<li><a href="#">abercrombie</a></li>
-										<li><a href="#">ecko united</a></li>
-										<li><a href="#">zara</a></li>
-									</ul>
-								</div>
-								<!--/ End Single Widget -->
+								<!--/ End Recent items -->
 						</div>
 					</div>
 					<div class="col-lg-9 col-md-8 col-12">
@@ -353,6 +341,11 @@
                 selectedProduct: null,
                 selectedProductQty: 1,
                 currentSlide: 0,
+                filterList: null,
+                categoryId: null,
+                minPrice: null,
+                maxPrice: null,
+                tags: [],
             }
         },
         computed: {
@@ -373,7 +366,7 @@
         },
         methods: {
             getProducts() {
-                axios.get('/api/products').then(res => {
+                axios.post('/api/products', {}).then(res => {
                     this.products = res.data.data;
                 });
             },
@@ -420,10 +413,73 @@
             },
             goToSlide(index) {
                 this.currentSlide = index;
+            },
+            getFilterList() {
+                axios.get('/api/products/filters').then(res => {
+                    this.filterList = res.data;
+                    const vm = this;
+
+                    /*=======================
+                    Slider Range jQuery plugin
+                    =========================*/ 
+                    $( function() {
+                        $( "#slider-range" ).slider({
+                            range: true,
+                            min: Number(vm.filterList.price.min),
+                            max: Number(vm.filterList.price.max),
+                            values: [ Number(vm.filterList.price.min), Number(vm.filterList.price.max) ],
+                            slide: function( event, ui ) {
+                                vm.applyFilter('price', ui.values);
+                                $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+                            }
+                        });
+                        $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+                            " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+                    } );                    
+                });
+            },
+            applyFilter(type, value) {
+                if (type === "category") {
+                    this.categoryId = value !== this.categoryId ? value : null;
+                }
+                if (type === "tags") {
+                    if (!this.tags.includes(value)) {
+                        this.tags.push(value);
+                    } else {
+                        const idx = this.tags.indexOf(value);
+                        this.tags.splice(idx, 1);
+                    }
+                }
+                if (type === "price") {
+                    this.minPrice = value[0];
+                    this.maxPrice = value[1];
+                }
+
+                const payload = {};
+
+                if (this.categoryId) {
+                    payload.category = this.categoryId;
+                }
+
+                if (this.minPrice !== null && this.maxPrice !== null) {
+                    payload.price = {
+                        from: this.minPrice,
+                        to: this.maxPrice,
+                    };
+                }
+
+                if (this.tags.length > 0) {
+                    payload.tags = this.tags;
+                }
+
+                axios.post('/api/products', payload).then(res => {
+                    this.products = res.data.data;
+                });
             }
         },
         mounted() {
             this.getProducts();
+            this.getFilterList();
         }
     }
 </script>

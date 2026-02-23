@@ -6,9 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\ProductImage;
+use App\Models\Traits\Filterable;
 
 class Product extends Model
 {
+    use Filterable;
+
     protected $fillable = [
         'title', 
         'description', 

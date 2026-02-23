@@ -27,24 +27,7 @@ export function initJquery() {
     $('.top-search a').on( "click", function(){
         $('.search-top').toggleClass('active');
     });
-    
-    /*=======================
-        Slider Range JS
-    =========================*/ 
-    $( function() {
-        $( "#slider-range" ).slider({
-            range: true,
-            min: 0,
-            max: 500,
-            values: [ 120, 250 ],
-            slide: function( event, ui ) {
-            $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-            }
-        });
-        $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-            " - $" + $( "#slider-range" ).slider( "values", 1 ) );
-    } );
-    
+
     /*=======================
         Home Slider JS
     =========================*/ 
@@ -256,23 +239,6 @@ export function initJquery() {
     18. Nice Select JS
     ======================================*/	
     $('select').niceSelect();
-        
-    /*=====================================
-    Others JS
-    ======================================*/ 	
-    $( function() {
-        $( "#slider-range" ).slider({
-            range: true,
-            min: 0,
-            max: 500,
-            values: [ 0, 500 ],
-            slide: function( event, ui ) {
-                $( "#amount" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
-            }
-        });
-        $( "#amount" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-        " - $" + $( "#slider-range" ).slider( "values", 1 ) );
-    } );
     
     /*=====================================
     Preloader JS

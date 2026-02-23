@@ -6,12 +6,20 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Resources\API\Product\ProductListResource;
+use App\Http\Requests\API\Product\IndexRequest;
+use App\Http\Filters\API\ProductFilter;
 
 class IndexController extends Controller
 {
-    public function __invoke()
+    public function __invoke(IndexRequest $request)
     {
-        $products = Product::where('is_published', true)->get();
+        $data = $request->validated();
+        $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($data)]);
+
+        $products = Product::filter($filter)
+            ->where('is_published', true)    
+            ->get();
+            
         return ProductListResource::collection($products);
     }
 }

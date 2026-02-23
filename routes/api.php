@@ -10,5 +10,6 @@ Route::get('/user', function (Request $request) {
 Route::prefix('products')
     ->namespace('App\Http\Controllers\API\Product')
     ->group(function () {
-        Route::get('/', IndexController::class);
+        Route::post('/', IndexController::class);
+        Route::get('/filters', FilterListController::class);
     });
