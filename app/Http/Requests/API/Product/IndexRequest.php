@@ -29,7 +29,9 @@ class IndexRequest extends FormRequest
             'tags' => 'nullable|array',
             'tags.*' => 'nullable|integer|exists:tags,id',
             'page' => 'required|integer',
-            'productsPerPage' => 'required|integer'
+            'products_per_page' => 'required|integer',
+            'sort' => 'nullable|string|in:price_asc,price_desc,newest,oldest,name_asc,name_desc',
+            'exclude_id' => 'nullable|integer|exists:products,id',
         ];
     }
 }

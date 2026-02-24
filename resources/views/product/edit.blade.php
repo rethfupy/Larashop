@@ -115,7 +115,7 @@
                         </div>                        
                         <div class="form-group w-100">
                             <label for="price" class="form-label">Price</label>
-                            <input type="number" name="price" class="form-control" placeholder="Enter price" min="0" value="{{ old('price') ?? $product->price }}" required>
+                            <input type="number" name="price" class="form-control" placeholder="Enter price" min="0" value="{{ old('price') ?? $product->price }}" required step="0.01">
                         </div>
                         <div class="form-group w-100">
                             <label for="stock" class="form-label">Stock</label>

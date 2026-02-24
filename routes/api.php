@@ -12,4 +12,5 @@ Route::prefix('products')
     ->group(function () {
         Route::post('/', IndexController::class);
         Route::get('/filters', FilterListController::class);
+        Route::get('/{product}', ShowController::class);
     });

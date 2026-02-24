@@ -17,8 +17,8 @@ class IndexController extends Controller
         $filter = app()->make(ProductFilter::class, ['queryParams' => array_filter($data)]);
 
         $products = Product::filter($filter)
-            ->where('is_published', true)    
-            ->paginate($data['productsPerPage'], ['*'], 'page', $data['page']);
+            ->where('is_published', true)
+            ->paginate($data['products_per_page'], ['*'], 'page', $data['page']);
             
         return ProductListResource::collection($products);
     }

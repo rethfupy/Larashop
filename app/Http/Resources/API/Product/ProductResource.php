@@ -5,6 +5,8 @@ namespace App\Http\Resources\API\Product;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\API\Category\CategoryResource;
+use App\Http\Resources\API\Tag\TagResource;
+use App\Http\Resources\API\Product\Image\ProductImageResource;
 
 class ProductResource extends JsonResource
 {
@@ -24,6 +26,8 @@ class ProductResource extends JsonResource
             'stock' => $this->stock,
             'preview_image' => $this->preview_image_url,
             'category' => new CategoryResource($this->category),
+            'tags' => TagResource::collection($this->tags),
+            'images' => ProductImageResource::collection($this->images),
         ];
     }
 }

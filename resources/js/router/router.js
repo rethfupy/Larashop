@@ -12,6 +12,11 @@ const routes = [
         name: "product.index",
     },
     {
+        path: "/products/:id",
+        component: () => import('.././components/product/Show.vue'),
+        name: "product.show",
+    },
+    {
         path: "/:pathMatch(.*)*",
         component: () => import('.././components/main/404.vue'),
         name: "main.404",

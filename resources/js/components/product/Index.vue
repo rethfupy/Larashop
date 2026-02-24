@@ -148,10 +148,16 @@
 										</div>
 										<div class="flex items-center gap-2">
 											<label class="mb-0">Sort By:</label>
-											<select class="no-nice-select px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
-												<option selected="selected">Name</option>
-												<option>Price</option>
-												<option>Size</option>
+											<select class="no-nice-select px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 cursor-pointer"
+                                                v-model="sort"
+                                                @change="changeSort(sort)"
+                                            >
+												<option value="newest">Newest first</option>
+												<option value="oldest">Oldest first</option>
+												<option value="price_asc">Price: Low to High</option>
+                                                <option value="price_desc">Price: High to Low</option>
+                                                <option value="name_asc">Name: A to Z</option>
+                                                <option value="name_desc">Name: Z to A</option>
 											</select>
 										</div>
 									</div>
@@ -163,7 +169,7 @@
                             <div class="col-lg-4 col-md-6 col-12" v-for="product in products">
                                 <div class="single-product">
                                     <div class="product-img">
-                                        <a href="#">
+                                        <a>
                                             <img class="default-img" :src="product.preview_image" alt="#">
                                             <img class="hover-img" :src="product.preview_image" alt="#">
                                         </a>
@@ -184,7 +190,7 @@
                                     </div>
                                     <div class="product-content">
                                         <h3>
-                                            <a href="product-details.html">{{ product.title }}</a>
+                                            <RouterLink :to="{ name: 'product.show', params: { id: product.id }}">{{ product.title }}</RouterLink>
                                         </h3>
                                         <div class="product-price">
                                             <span>{{ product.price }} €</span>
@@ -392,6 +398,7 @@
                 tags: [],
                 pagination: [],
                 productsPerPage: 9,
+                sort: 'newest',
             }
         },
         computed: {
@@ -414,7 +421,8 @@
             getProducts(page = 1) {
                 const payload = {
                     'page': page,
-                    'productsPerPage': this.productsPerPage,
+                    'products_per_page': this.productsPerPage,
+                    'sort': this.sort,
                 };
 
                 if (this.categoryId) {
@@ -526,6 +534,10 @@
             },
             changeProductsPerPage(value) {
                 this.productsPerPage = value;
+                this.getProducts();
+            },
+            changeSort(value) {
+                this.sort = value;
                 this.getProducts();
             }
         },
