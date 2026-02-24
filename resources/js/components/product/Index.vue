@@ -132,20 +132,23 @@
 						<div class="row">
 							<div class="col-12">
 								<!-- Shop Top -->
-								<div class="shop-top">
-									<div class="shop-shorter">
-										<div class="single-shorter">
-											<label>Show :</label>
-											<select>
-												<option selected="selected">09</option>
-												<option>15</option>
-												<option>25</option>
-												<option>30</option>
+								<div class="shop-top py-4">
+									<div class="flex gap-4">
+										<div class="flex items-center gap-2"> <!-- single-shorter -->
+											<label class="mb-0">Show:</label>
+											<select class="no-nice-select px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 cursor-pointer" 
+                                                v-model.number="productsPerPage" 
+                                                @change="changeProductsPerPage(productsPerPage)"
+                                            >
+												<option :value="9">09</option>
+												<option :value="15">15</option>
+												<option :value="25">25</option>
+												<option :value="30">30</option>
 											</select>
 										</div>
-										<div class="single-shorter">
-											<label>Sort By :</label>
-											<select>
+										<div class="flex items-center gap-2">
+											<label class="mb-0">Sort By:</label>
+											<select class="no-nice-select px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
 												<option selected="selected">Name</option>
 												<option>Price</option>
 												<option>Size</option>
@@ -190,6 +193,47 @@
                                 </div>
                             </div>
 						</div>
+                        <div class="row" v-if="pagination && pagination.last_page > 1">
+                            <div class="col-12">
+                                <!-- Pagination -->
+								<div class="flex items-center justify-center gap-2 py-4">
+                                    <!-- Previous -->
+                                    <button @click.prevent="getProducts(pagination.current_page - 1)"
+                                        :disabled="pagination.current_page === 1"
+                                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed!"
+                                    >Previous</button>
+
+                                    <template v-for="link in pagination.links">
+                                        <button v-if="Number(link.label) &&
+                                                (pagination.current_page - link.label < 2 &&
+                                                pagination.current_page - link.label > -2) ||
+                                                Number(link.label) === 1 || 
+                                                Number(link.label) === pagination.last_page"
+                                            @click.prevent="getProducts(link.label)"
+                                            :disabled="link.active"
+                                            :class="link.active ? 'text-white bg-blue-600 border-blue-600' : 'text-gray-700 bg-white border-gray-300'"
+                                            class="px-3 py-2 text-sm font-medium border rounded-md hover:bg-gray-50"
+                                        >{{ link.label }}</button>
+
+                                        <span v-if="(Number(link.label) &&
+                                                pagination.current_page !== 3 &&
+                                                pagination.current_page - link.label === 2) ||
+                                                (Number(link.label) &&
+                                                pagination.current_page !== pagination.last_page - 2 &&
+                                                pagination.current_page - link.label === -2)"
+                                            class="px-2 text-gray-500"
+                                        >...</span>
+                                    </template>
+
+                                    <!-- Next -->
+                                    <button @click.prevent="getProducts(pagination.current_page + 1)"
+                                        :disabled="pagination.current_page === pagination.last_page"
+                                        class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed!"
+                                    >Next</button>
+                                </div>
+                                <!--/ End Pagination -->
+							</div>
+                        </div>
 					</div>
 				</div>
 			</div>
@@ -346,6 +390,8 @@
                 minPrice: null,
                 maxPrice: null,
                 tags: [],
+                pagination: [],
+                productsPerPage: 9,
             }
         },
         computed: {
@@ -365,9 +411,30 @@
             }
         },
         methods: {
-            getProducts() {
-                axios.post('/api/products', {}).then(res => {
+            getProducts(page = 1) {
+                const payload = {
+                    'page': page,
+                    'productsPerPage': this.productsPerPage,
+                };
+
+                if (this.categoryId) {
+                    payload.category = this.categoryId;
+                }
+
+                if (this.minPrice !== null && this.maxPrice !== null) {
+                    payload.price = {
+                        from: this.minPrice,
+                        to: this.maxPrice,
+                    };
+                }
+
+                if (this.tags.length > 0) {
+                    payload.tags = this.tags;
+                }
+
+                axios.post('/api/products', payload).then(res => {
                     this.products = res.data.data;
+                    this.pagination = res.data.meta;
                 });
             },
             selectProduct(product) {
@@ -438,7 +505,7 @@
                     } );                    
                 });
             },
-            applyFilter(type, value) {
+            applyFilter(type, value) { 
                 if (type === "category") {
                     this.categoryId = value !== this.categoryId ? value : null;
                 }
@@ -455,26 +522,11 @@
                     this.maxPrice = value[1];
                 }
 
-                const payload = {};
-
-                if (this.categoryId) {
-                    payload.category = this.categoryId;
-                }
-
-                if (this.minPrice !== null && this.maxPrice !== null) {
-                    payload.price = {
-                        from: this.minPrice,
-                        to: this.maxPrice,
-                    };
-                }
-
-                if (this.tags.length > 0) {
-                    payload.tags = this.tags;
-                }
-
-                axios.post('/api/products', payload).then(res => {
-                    this.products = res.data.data;
-                });
+                this.getProducts();
+            },
+            changeProductsPerPage(value) {
+                this.productsPerPage = value;
+                this.getProducts();
             }
         },
         mounted() {

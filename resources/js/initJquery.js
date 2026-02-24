@@ -238,7 +238,7 @@ export function initJquery() {
     /*====================================
     18. Nice Select JS
     ======================================*/	
-    $('select').niceSelect();
+    $('select:not(.no-nice-select)').niceSelect();
     
     /*=====================================
     Preloader JS
