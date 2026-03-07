@@ -184,7 +184,7 @@
                                                 <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
                                             </div>
                                             <div class="product-action-2">
-                                                <a title="Add to cart" href="#">Add to cart</a>
+                                                <a @click.prevent="addToCart(product.id, product.stock)" title="Add to cart" href="#">Add to cart</a>
                                             </div>
                                         </div>
                                     </div>
@@ -357,7 +357,7 @@
                                     </div>
 
                                     <div class="add-to-cart d-block">
-                                        <a href="#" class="btn">Add to cart</a>
+                                        <a href="#" class="btn" @click.prevent="addToCart(selectedProduct.id, selectedProduct.stock, selectedProductQty)">Add to cart</a>
                                         <a href="#" class="btn min"><i class="ti-heart"></i></a>
                                     </div>
                                     <div class="default-social">
@@ -382,6 +382,7 @@
 
 <script>
     import axios from 'axios';
+    import { cart } from '../../composables/cart';
 
     export default {
         name: "ProductIndex",
@@ -416,6 +417,13 @@
             hasMultipleImages() {
                 return this.allImages.length > 1;
             }
+        },
+        setup() {
+            const { addToCart } = cart();
+
+            return {
+                addToCart
+            };
         },
         methods: {
             getProducts(page = 1) {

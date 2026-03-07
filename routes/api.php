@@ -13,4 +13,5 @@ Route::prefix('products')
         Route::post('/', IndexController::class);
         Route::get('/filters', FilterListController::class);
         Route::get('/{product}', ShowController::class);
+        Route::post('/cart', ProductsController::class);
     });

@@ -1,7 +1,6 @@
 <template>
-    <div>
         <!-- Header -->
-        <header class="header shop v2">
+        <header class="header shop v2 relative z-50">
             <!-- Topbar -->
             <div class="topbar">
                 <div class="container">
@@ -82,35 +81,42 @@
                                     <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
                                 </div>
                                 <div class="sinlge-bar shopping">
-                                    <a href="#" class="single-icon"><i class="ti-bag"></i> <span class="total-count">2</span></a>
+                                    <a href="#" class="single-icon"><i class="ti-bag"></i> <span class="total-count">{{ cartCount }}</span></a>
                                     <!-- Shopping Item -->
                                     <div class="shopping-item">
                                         <div class="dropdown-cart-header">
-                                            <span>2 Items</span>
+                                            <span>{{ cartCount }} Items</span>
                                             <a href="#">View Cart</a>
                                         </div>
                                         <ul class="shopping-list">
-                                            <li>
-                                                <a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
-                                                <a class="cart-img" href="#"><img src="" alt="#"></a>
-                                                <h4><a href="#">Woman Ring</a></h4>
-                                                <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="remove" title="Remove this item"><i class="fa fa-remove"></i></a>
-                                                <a class="cart-img" href="#"><img src="" alt="#"></a>
-                                                <h4><a href="#">Woman Necklace</a></h4>
-                                                <p class="quantity">1x - <span class="amount">$35.00</span></p>
+                                            <li v-for="item in cartItems">
+                                                <a 
+                                                    href="#" 
+                                                    @click.prevent="removeFromCart(item.id)" 
+                                                    class="remove" 
+                                                    title="Remove this item"
+                                                >
+                                                    <i class="fa fa-remove"></i>
+                                                </a>
+                                                <a class="cart-img" href="#">
+                                                    <img :src="item.preview_image" :alt="item.title">
+                                                </a>
+                                                <h4>
+                                                    <RouterLink :to="{ name: 'product.show', params: { id: item.id }}">{{ item.title }}</RouterLink>
+                                                </h4>
+                                                <p class="quantity">
+                                                    {{ item.qty }}x - <span class="amount">${{ item.price }}</span>
+                                                </p>
                                             </li>
                                         </ul>
                                         <div class="bottom">
                                             <div class="total">
                                                 <span>Total</span>
-                                                <span class="total-amount">$134.00</span>
+                                                <span class="total-amount">${{ cartTotal.toFixed(2) }}</span>
                                             </div>
-                                            <a href="checkout.html" class="btn animate">Checkout</a>
+                                            <a href="/checkout" class="btn animate">Checkout</a>
                                         </div>
-                                    </div>
+                                    </div> 
                                     <!--/ End Shopping Item -->
                                 </div>
                             </div>
@@ -273,18 +279,37 @@
             </div>
         </footer>
         <!-- /End Footer Area -->
-    </div>
 </template>
 
 <script>
     import { initJquery } from '../initJquery.js';
+    import { cart } from '../composables/cart';
 
     export default {
         name: "App",
+        setup() {
+            const { 
+                cartItems, 
+                cartCount, 
+                cartTotal, 
+                removeFromCart, 
+                fetchCartProducts 
+            } = cart();
+
+            return {
+                cartItems,
+                cartCount,
+                cartTotal,
+                removeFromCart,
+                fetchCartProducts
+            };
+        },
         mounted() {
             setTimeout(() => {
                 initJquery();
             }, 100);
+
+            this.fetchCartProducts();
         },
         watch: {
             '$route.path'() {

@@ -85,7 +85,7 @@
                                             <!--/ End Input Order -->
                                         </div>
                                         <div class="add-to-cart">
-                                            <a href="#" class="btn">Add to cart</a>
+                                            <a href="#" class="btn" @click.prevent="addToCart(product.id, product.stock, productQty)">Add to cart</a>
                                             <a href="#" class="btn min"><i class="ti-heart"></i></a>
                                         </div>
                                         <p class="cat">Category: <strong class="capitalize">{{ product.category.title }}</strong></p>
@@ -153,7 +153,7 @@
                                             <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to Wishlist</span></a>
                                         </div>
                                         <div class="product-action-2">
-                                            <a title="Add to cart" href="#">Add to cart</a>
+                                            <a title="Add to cart" href="#" @click.prevent="addToCart(product.id, product.stock)">Add to cart</a>
                                         </div>
                                     </div>
                                 </div>
@@ -273,7 +273,7 @@
                                     </div>
 
                                     <div class="add-to-cart d-block">
-                                        <a href="#" class="btn">Add to cart</a>
+                                        <a href="#" class="btn" @click.prevent="addToCart(selectedProduct.id, selectedProduct.stock, selectedProductQty)">Add to cart</a>
                                         <a href="#" class="btn min"><i class="ti-heart"></i></a>
                                     </div>
                                     <div class="default-social">
@@ -298,6 +298,7 @@
 
 <script>
     import axios from 'axios';
+    import { cart } from '../../composables/cart';
 
     export default {
         name: "ProductShow",
@@ -326,6 +327,13 @@
             hasMultipleImages() {
                 return this.allImages.length > 1;
             }
+        },
+        setup() {
+            const { addToCart } = cart();
+
+            return {
+                addToCart
+            };
         },
         methods: {
             getProduct(id) {
@@ -390,7 +398,7 @@
             },
             goToSlide(index) {
                 this.currentSlide = index;
-            },
+            }
         },
         mounted() {
             this.getProduct(this.$route.params.id);
