@@ -9,8 +9,8 @@
                             <!-- Top Left -->
                             <div class="top-left">
                                 <ul class="list-main">
-                                    <li><i class="ti-headphone-alt"></i> +060 (800) 801-582</li>
-                                    <li><i class="ti-email"></i> support@shophub.com</li>
+                                    <li><i class="ti-headphone-alt"></i> +123 444 555 666</li>
+                                    <li><i class="ti-email"></i> support@larashop.laravel</li>
                                 </ul>
                             </div>
                             <!--/ End Top Left -->
@@ -19,8 +19,7 @@
                             <!-- Top Right -->
                             <div class="right-content">
                                 <ul class="list-main">
-                                    <li><i class="ti-location-pin"></i> Store location</li>
-                                    <li><i class="ti-alarm-clock"></i> <a href="#">Daily deal</a></li>
+                                    <li><i class="ti-location-pin"></i> Lara City</li>
                                     <li><i class="ti-user"></i> <a href="#">My account</a></li>
                                     <li><i class="ti-power-off"></i><a href="login.html#">Login</a></li>
                                 </ul>
@@ -37,7 +36,7 @@
                         <div class="col-lg-2 col-md-2 col-12">
                             <!-- Logo -->
                             <div class="logo">
-                                <a href="index.html"><img src="/public/client/images/logo.png" alt="logo"></a>
+                                <a href="/"><img src="/public/client/images/logo.png" alt="logo"></a>
                             </div>
                             <!--/ End Logo -->
                             <!-- Search Form -->
@@ -81,12 +80,14 @@
                                     <a href="#" class="single-icon"><i class="fa fa-user-circle-o" aria-hidden="true"></i></a>
                                 </div>
                                 <div class="sinlge-bar shopping">
-                                    <a href="#" class="single-icon"><i class="ti-bag"></i> <span class="total-count">{{ cartCount }}</span></a>
+                                    <RouterLink class="single-icon" :to="{ name: 'cart.index' }">
+                                        <i class="ti-bag"></i> <span class="total-count">{{ cartCount }}</span>
+                                    </RouterLink>
                                     <!-- Shopping Item -->
                                     <div class="shopping-item">
                                         <div class="dropdown-cart-header">
                                             <span>{{ cartCount }} Items</span>
-                                            <a href="#">View Cart</a>
+                                            <RouterLink :to="{ name: 'cart.index' }">View Cart</RouterLink>
                                         </div>
                                         <ul class="shopping-list">
                                             <li v-for="item in cartItems">
@@ -98,21 +99,21 @@
                                                 >
                                                     <i class="fa fa-remove"></i>
                                                 </a>
-                                                <a class="cart-img" href="#">
+                                                <RouterLink class="cart-img" :to="{ name: 'product.show', params: { id: item.id }}">
                                                     <img :src="item.preview_image" :alt="item.title">
-                                                </a>
+                                                </RouterLink>
                                                 <h4>
                                                     <RouterLink :to="{ name: 'product.show', params: { id: item.id }}">{{ item.title }}</RouterLink>
                                                 </h4>
                                                 <p class="quantity">
-                                                    {{ item.qty }}x - <span class="amount">${{ item.price }}</span>
+                                                    {{ item.qty }}x - <span class="amount">{{ item.price }} €</span>
                                                 </p>
                                             </li>
                                         </ul>
                                         <div class="bottom">
                                             <div class="total">
                                                 <span>Total</span>
-                                                <span class="total-amount">${{ cartTotal.toFixed(2) }}</span>
+                                                <span class="total-amount">{{ cartTotal.toFixed(2) }} €</span>
                                             </div>
                                             <a href="/checkout" class="btn animate">Checkout</a>
                                         </div>
@@ -142,34 +143,9 @@
                                                     <li>
                                                         <RouterLink :to="{ name: 'product.index' }">Products</RouterLink>
                                                     </li>
-                                                    <li><a href="#">Service</a></li>
-                                                    <li><a href="#">Shop<i class="ti-angle-down"></i><span class="new">New</span></a>
-                                                        <ul class="dropdown">
-                                                            <li><a href="shop-grid.html">Shop Grid</a></li>
-                                                            <li><a href="shop-list.html">Shop List</a></li>
-                                                            <li><a href="shop-single.html">shop Single</a></li>
-                                                            <li><a href="cart.html">Cart</a></li>
-                                                            <li><a href="checkout.html">Checkout</a></li>
-                                                        </ul>
+                                                    <li>
+                                                        <RouterLink :to="{ name: 'cart.index' }">Cart</RouterLink>
                                                     </li>
-                                                    <li><a href="#">Pages<i class="ti-angle-down"></i></a>
-                                                        <ul class="dropdown">
-                                                            <li><a href="about-us.html">About Us</a></li>
-                                                            <li><a href="login.html">Login</a></li>
-                                                            <li><a href="register.html">Register</a></li>
-                                                            <li><a href="mail-success.html">Mail Success</a></li>
-                                                            <li><a href="404.html">404</a></li>
-                                                        </ul>
-                                                    </li>									
-                                                    <li><a href="#">Blog<i class="ti-angle-down"></i></a>
-                                                        <ul class="dropdown">
-                                                            <li><a href="blog-grid.html">Blog Grid</a></li>
-                                                            <li><a href="blog-grid-sidebar.html">Blog Grid Sidebar</a></li>
-                                                            <li><a href="blog-single.html">Blog Single</a></li>
-                                                            <li><a href="blog-single-sidebar.html">Blog Single Sidebar</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><a href="contact.html">Contact Us</a></li>
                                                 </ul>
                                             </div>
                                         </div>

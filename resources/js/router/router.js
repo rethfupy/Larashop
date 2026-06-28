@@ -17,6 +17,11 @@ const routes = [
         name: "product.show",
     },
     {
+        path: "/cart",
+        component: () => import('.././components/cart/Index.vue'),
+        name: "cart.index",
+    },
+    {
         path: "/:pathMatch(.*)*",
         component: () => import('.././components/main/404.vue'),
         name: "main.404",
