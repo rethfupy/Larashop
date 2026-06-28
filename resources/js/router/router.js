@@ -22,6 +22,11 @@ const routes = [
         name: "cart.index",
     },
     {
+        path: "/checkout",
+        component: () => import('.././components/checkout/Index.vue'),
+        name: "checkout.index",
+    },
+    {
         path: "/:pathMatch(.*)*",
         component: () => import('.././components/main/404.vue'),
         name: "main.404",

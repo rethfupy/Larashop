@@ -25,7 +25,14 @@ class User extends Authenticatable
         'surname',
         'address',
         'age',
-        'gender'
+        'gender',
+        'last_name',
+        'phone',
+        'address_line_2',
+        'city',
+        'state',
+        'country',
+        'postal_code',
     ];
 
     protected $casts = [

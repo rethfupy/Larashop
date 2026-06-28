@@ -104,8 +104,8 @@
                                             <li class="last">You Pay<span>{{ cartTotal }} €</span></li>
                                         </ul>
                                         <div class="button5">
-                                            <a href="#" class="btn">Checkout</a>
-                                            <a href="#" class="btn">Continue shopping</a>
+                                            <RouterLink class="btn animate" :to="{ name: 'checkout.index' }">Checkout</RouterLink>
+                                            <RouterLink class="btn animate" :to="{ name: 'product.index' }">Continue shopping</RouterLink>
                                         </div>
                                     </div>
                                 </div>
@@ -121,7 +121,7 @@
                 <i class="ti-shopping-cart"></i>
                 <h4>Your cart is currently empty</h4>
                 <p>Looks like you haven't added anything to your cart yet. Start exploring our products!</p>
-                <RouterLink :to="{ name: 'main.index' }" class="btn text-white">Continue Shopping</RouterLink>
+                <RouterLink :to="{ name: 'product.index' }" class="btn text-white">Continue Shopping</RouterLink>
             </div>
         </div>
         <!--/ End Shopping Cart -->

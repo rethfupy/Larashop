@@ -115,7 +115,7 @@
                                                 <span>Total</span>
                                                 <span class="total-amount">{{ cartTotal.toFixed(2) }} €</span>
                                             </div>
-                                            <a href="/checkout" class="btn animate">Checkout</a>
+                                            <RouterLink class="btn animate" :to="{ name: 'checkout.index' }">Checkout</RouterLink>
                                         </div>
                                     </div> 
                                     <!--/ End Shopping Item -->

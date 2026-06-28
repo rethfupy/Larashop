@@ -15,3 +15,9 @@ Route::prefix('products')
         Route::get('/{product}', ShowController::class);
         Route::post('/cart', ProductsController::class);
     });
+
+Route::prefix('order')
+    ->namespace('App\Http\Controllers\API\Order')
+    ->group(function () {
+        Route::post('/store', StoreController::class);
+    });
