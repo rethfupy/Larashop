@@ -63,6 +63,16 @@ Route::prefix('admin')->middleware('auth:admin')->group(function() {
             Route::patch('/{product}', UpdateController::class)->name('product.update');
             Route::delete('/{product}', DeleteController::class)->name('product.delete');
         });
+
+    Route::prefix('orders')
+        ->namespace('\App\Http\Controllers\Order')
+        ->group(function() {
+            Route::get('/', IndexController::class)->name('order.index');
+            Route::get('/{order}/edit', EditController::class)->name('order.edit');
+            Route::get('/{order}', ShowController::class)->name('order.show');
+            Route::patch('/{order}', UpdateController::class)->name('order.update');
+            Route::delete('/{order}', DeleteController::class)->name('order.delete');
+        });
 });
 
 Route::get('{any}', App\Http\Controllers\Client\IndexController::class)
