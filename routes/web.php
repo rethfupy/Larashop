@@ -3,6 +3,17 @@
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function() {
+    Route::middleware('guest:admin')->group(function() {
+        Route::get('/login', \App\Http\Controllers\Admin\Auth\IndexController::class)->name('admin.login');
+        Route::post('/login', \App\Http\Controllers\Admin\Auth\StoreController::class)->name('admin.login.store');
+    });
+
+    Route::post('/logout', \App\Http\Controllers\Admin\Auth\DestroyController::class)
+        ->middleware('auth:admin')
+        ->name('admin.logout');
+});
+
+Route::prefix('admin')->middleware('auth:admin')->group(function() {
     Route::get('/', \App\Http\Controllers\Main\IndexController::class)->name('main.index');
 
     Route::prefix('categories')
